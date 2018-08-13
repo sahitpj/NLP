@@ -2,7 +2,7 @@ import loader
 import matplotlib.pyplot as plt
 
 
-textInWords = loader.loader('dataCollection')
+textInWords = loader.loader('dataCollection')[0]
 
 dataPoints_x = []
 dataPoints_y = []
@@ -14,5 +14,7 @@ for i in xrange(10):
 
 plt.plot(dataPoints_y, dataPoints_x)
 plt.show()
+
+
 
 
