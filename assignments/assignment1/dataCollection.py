@@ -18,10 +18,15 @@ for i in lines_:
 
 lines = lines[252:]
 data = ' '.join(lines).decode('utf-8')
-text_in_words = [i for i in word_tokenize(data.lower()) if i not in stopWords]
-count = Counter(text_in_words)
+textInWords = [i for i in word_tokenize(data.lower()) if i not in stopWords]
+count = Counter(textInWords)
 
 sortedTypes =  sorted(count.items(), key=lambda i: i[1], reverse=True)
 tokens = word_tokenize(data.lower())
-types = [ sortedTypes[i][0] for j in xrange(len(sortedTypes)) ]
-        
+types = [ sortedTypes[j][0] for j in xrange(len(sortedTypes)) ]
+
+noOfTokens = float(len(tokens))
+noOfTypes = float(len(types))
+TTR = noOfTypes/noOfTokens
+
+__exports__ = textInWords
