@@ -35,22 +35,32 @@ for i in xrange(30):
 
 
 plt.scatter(logOfWordFrequencies, logOfWordRanks)
+plt.xlabel("log(word frequencies)")
+plt.ylabel("log(word ranks)")
 plt.show()
 
 plt.scatter(logWordMeanings,logOfWordRanks)
 plt.ylim((3,10))
+plt.xlabel("log(word meanings)")
+plt.ylabel("log(word ranks)")
 plt.show()
 
 plt.scatter(logWordMeanings, logOfWordFrequencies)
 plt.ylim((-10,20))
+plt.xlabel("log(word meaning)")
+plt.ylabel("log(word frequency)")
 plt.show()
 
 plt.scatter(logOfWordLength, logOfWordFrequencies)
 plt.ylim((-10,20))
+plt.xlabel("log(word length)")
+plt.ylabel("log(word frequency)")
 plt.show()
 
 plt.scatter(logOfWordLength, logOfWordRanks)
 plt.ylim((0,10))
+plt.xlabel("log(word length)")
+plt.ylabel("log(word rank)")
 plt.show()
 
 lVSf = [ wordFrequencies[i]*wordLength[i] for i in xrange(30)]

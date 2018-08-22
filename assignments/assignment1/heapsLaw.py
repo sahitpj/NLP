@@ -13,6 +13,8 @@ for i in xrange(10):
     dataPoints_y.append((i+1)*9000)
 
 plt.plot(dataPoints_y, dataPoints_x)
+plt.xlabel("tokens")
+plt.ylabel("unique words")
 plt.show()
 
 
