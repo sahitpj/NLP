@@ -11,7 +11,7 @@ noOfSentences = len(sentences)
 
 tokens = nltk.word_tokenize(text)
 v= []
-stopwords = ['!', ',', ';', '?', '.', '-', '!']
+stopwords = ['!', ',', ';', '?', '.', '-', '!', '*']
 for token in tokens:
     if token not in stopwords:
         v.append(token)

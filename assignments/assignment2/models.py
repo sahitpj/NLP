@@ -69,6 +69,8 @@ class language_model(object):
     def unigram_model(self, smoothing,  word):
         f =  self.find_word_set(word)
         count_before = f
+        if f == 0:
+            count_before = 1
         if smoothing == "add1":
             count_after = (f+1)/(self.tokens + self.vocabulary_size)*self.tokens
             return (f+1)/(self.tokens + self.vocabulary_size), [count_before, count_after], count_after/count_before
@@ -82,12 +84,18 @@ class language_model(object):
         c1 = self.find_word_set(word_1, word_2)
         c2 = self.find_word_set(word_2)
         count_before = c1
+        if c1 == 0:
+            count_before = 0.00001
         if smoothing == "add1":
             count_after = (c1+1)/(c2+self.vocabulary_size)*c2
             return (c1+1)/(c2+self.vocabulary_size), [count_before, count_after], count_after/count_before
         if smoothing == "gt":
-            count_after = ((c1+1)*self.bigrams_count[c1+1]/self.bigrams_count[c1+1])
-            return self.bigrams_count[c1+1]/c2, [count_before, count_after], count_after/count_before
+            if self.bigrams_count[int(c1+1)] == 0:
+                self.bigrams_count[int(c1+1)] = 1
+            count_after = ((c1+1)*self.bigrams_count[int(c1+1)]/self.bigrams_count[int(c1+1)])
+            if c2 == 0:
+                c2 =  0.00001
+            return self.bigrams_count[int(c1+1)]/c2, [count_before, count_after], count_after/count_before
         if smoothing == None:
             if c2 == 0:
                 return 0, [0,0], 0
@@ -98,6 +106,8 @@ class language_model(object):
         c1 = self.find_word_set(word_1, word_2, word_3)
         c2 = self.find_word_set(word_1, word_2)
         count_before = c1
+        if c1== 0:
+            count_before = 0.00001
         if smoothing == "add1":
             count_after = (c1+1)/(c2+self.vocabulary_size)*c2
             return (c1+1)/(c2+self.vocabulary_size), [count_before, count_after], count_after/count_before
@@ -113,6 +123,8 @@ class language_model(object):
         c1 = self.find_word_set(word_1, word_2, word_3, word_4)
         c2 = self.find_word_set(word_1, word_2, word_3)
         count_before = c1
+        if c1== 0:
+            count_before =  0.00001
         if smoothing == "add1":
             count_after = (c1+1)/(c2+self.vocabulary_size)*c2
             return (c1+1)/(c2+self.vocabulary_size) , [count_before, count_after], count_after/count_before
@@ -213,6 +225,8 @@ class sentence_model(object):
             for i in xrange(len(sentence)-3):
                 p,c,d = self.trainingmodel.quadgram_model(smoothing, sentence[i], sentence[i+1], sentence[i+2], sentence[i+3])
                 l *= p
+        if l == 0:
+            l = 0.000001
         return math.log(l, 10)
 
     def sentence_generator(self, model, smoothing):
@@ -221,12 +235,12 @@ class sentence_model(object):
             self.trainingmodel.count_flag = 1
         r = ['<s>']
         if model == "unigram" : 
-            while r[-1] != '</s>' and len(r) < 30:
+            while r[-1] != '</s>' and len(r) < 10:
                 t = np.random.multinomial(100, self.trainingmodel.unigrams_p, size=1)
                 index = t.argmax()
                 r.append(self.trainingmodel.unigrams[index])
         if model == "bigram":
-            while r[-1] != '</s>' and len(r) < 30:
+            while r[-1] != '</s>' and len(r) < 10:
                 p_list = []
                 for i in xrange(self.trainingmodel.vocabulary_size):
                     p,c,d = self.trainingmodel.bigram_model(smoothing, r[-1],self.trainingmodel.vocabulary[i])
@@ -238,7 +252,7 @@ class sentence_model(object):
                 r.append(self.trainingmodel.vocabulary[index])
         if model == "trigram":
             count = 0 
-            while r[-1] != '</s>' and len(r) < 30:
+            while r[-1] != '</s>' and len(r) < 10:
                 if count == 0:
                     p_list = []
                     for i in xrange(self.trainingmodel.vocabulary_size):
@@ -264,7 +278,7 @@ class sentence_model(object):
                     r.append(self.trainingmodel.vocabulary[index])
         if model == "quadgram":
             count = 0
-            while r[-1] != '</s>' and len(r) < 30:
+            while r[-1] != '</s>' and len(r) < 10:
                 if count == 0:
                     p_list = []
                     for i in xrange(self.trainingmodel.vocabulary_size):
@@ -301,7 +315,6 @@ class sentence_model(object):
                     index = t.argmax()
                     r.append(self.trainingmodel.vocabulary[index])
                     count += 1
-                print r
         return r
 
 
@@ -311,7 +324,8 @@ class sentence_model(object):
         p = 1
         for i in xrange(n-1):
             prob, c,d = self.trainingmodel.bigram_model(smoothing, sentence[i], sentence[i+1])
-            p *= prob
+            if prob != 0:
+                p *= prob
         return (1.0/p)**(1.0/n)
 
 

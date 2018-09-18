@@ -1,1 +1,6 @@
+#systems files
 .DS_Store
+
+
+#ipython checkpoints
+.ipynb_checkpoints

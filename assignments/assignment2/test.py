@@ -60,13 +60,15 @@ Test4 passed
 
 #checking all functions for sentence_model
 
-# print testData[4]
+print testData[3]
+# ['<s>', u'i', u'wonder', u'if', u'i', u'\u2019', u've', u'been', u'changed', u'in', u'the', u'night', '</s>']
 # l = ['<s>', u'oh', u'dear', '</s>'] 
 # print sent_model.sentence_prob(l, None, "unigram")
 # print sent_model.sentence_prob(l, None, "quadgram")
 # print sent_model.sentence_generator("quadgram", None)
-# print sent_model.bigram_perplexity( testData[3], None)
+print sent_model.bigram_perplexity( testData[3], "add1")
 
 '''
 Test5 passed
 '''
+
